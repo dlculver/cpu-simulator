@@ -37,11 +37,50 @@ class MainMemory:
         print(f'CPU writing to main memory at address {address}: {data}')
         self.main_memory[address] = data
 
-## adding idx associated to cache for implementing FIFO or other replacement methods, might change later
-# class CacheMemory:
-#     def __init__(self, size, idx):
-#         self.size = size
-#         self.idx = idx
-#         self.memory = [{'tag':None, 'data': None}] * self.size
-#
-#     def retrieve_from_cache(self, idx):## finish tomorrow
+# adding idx associated to cache for implementing FIFO or other replacement methods, might change later
+class CacheMemory:
+    def __init__(self, size, idx = 0, main_memory_size = 128):
+        self.size = size
+        self.idx = idx
+        self.main_memory = MainMemory(main_memory_size)
+        self.data = [{'tag':None, 'data': None}] * self.size
+
+    def retrieve_from_cache(self, address):
+        if type(address) == int:
+            address = '{0:08b'.format(address)
+        for entry in self.data:
+            if entry['tag'] == address:
+                print(f"HIT: ", end = "")
+                return entry
+
+        print(f"MISS: ", end = "")
+        return None
+
+    def read_from_cache(self, address):
+        data = None
+        entry = self.retrieve_from_cache(address)
+        if entry:
+            print(f" - cache read: ")
+            data = entry['data']
+        else:
+            data = self.main_memory.read_from_mainmemory(address)
+            self.replace_add_entry(address, data)
+        return data
+
+    def fifo_policy(self):
+        index = self.idx
+        self.idx += 1
+        if self.idx == self.size:
+            self.idx = 0
+        return index
+
+    def replace_add_entry(self, address, value):
+        index = self.fifo_policy()
+        self.data[index] = {'tag': address, 'data': value}
+
+
+
+
+
+
+
