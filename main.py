@@ -25,7 +25,7 @@ def fetch_instructions(input_txt):
 def download_data(input_data):
     data_file = open(input_data, 'r')
     data = data_file.readlines()
-    data = list(map(lambda s: s.strip, data))
+    data = list(map(lambda s: s.strip(), data))
     return data
 
 ## initializes memory in cpu
@@ -45,7 +45,7 @@ def send_instructions(cpu, input_txt):
 ## start cpu
 cpu = CPU(MAIN_MEMORY_SIZE,CACHE_SIZE,NUMBER_OF_REGISTERS)
 print("---------------------------------------------------")
-print("Welcome to the Python CPU Simulator!")
+print("Welcome to my Python CPU Simulator!")
 print("---------------------------------------------------")
 print("Initializing Memory from data input file...")
 initialize_memory(cpu, data_input_file)
